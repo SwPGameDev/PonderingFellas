@@ -37,6 +37,7 @@ public class FellaBehavior : MonoBehaviour
     private CapsuleCollider col;
 
     #region STATS
+
     [Header("Stats")]
     public Team.TeamID currentTeam = Team.TeamID.None;
 
@@ -60,6 +61,7 @@ public class FellaBehavior : MonoBehaviour
 
     [Space]
     public bool aggroed = false;
+
     public GameObject target;
     public Vector3 destination;
 
@@ -72,6 +74,7 @@ public class FellaBehavior : MonoBehaviour
     {
         fellaCombat = GetComponent<FellaCombat>();
         fellaMovement = GetComponent<FellaMovement>();
+
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
 
@@ -85,6 +88,15 @@ public class FellaBehavior : MonoBehaviour
     {
         if (dead == false)
         {
+            if (currentTeam == Team.TeamID.Blue)
+            {
+                currentState = FellaController.Instance.blueState;
+            }
+            else if (currentTeam == Team.TeamID.Red)
+            {
+                currentState = FellaController.Instance.redState;
+            }
+
             switch (currentState)
             {
                 case FellaStates.Idle:
@@ -351,7 +363,7 @@ public class FellaBehavior : MonoBehaviour
 
         float goalY = transform.position.y - 5;
 
-        while(transform.position.y > goalY)
+        while (transform.position.y > goalY)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, goalY, transform.position.z), 1 * Time.deltaTime);
             yield return null;
