@@ -13,6 +13,10 @@ PrefabInstance:
       value: RedFella
       objectReference: {fileID: 0}
     - target: {fileID: 481812493773991030, guid: bb3f6bdf2e060d44aaa438db02bd636b, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 481812493773991030, guid: bb3f6bdf2e060d44aaa438db02bd636b, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -25,8 +29,20 @@ PrefabInstance:
       value: Mesh
       objectReference: {fileID: 0}
     - target: {fileID: 2504706775421578508, guid: bb3f6bdf2e060d44aaa438db02bd636b, type: 3}
+      propertyPath: melee
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504706775421578508, guid: bb3f6bdf2e060d44aaa438db02bd636b, type: 3}
+      propertyPath: attackRange
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504706775421578508, guid: bb3f6bdf2e060d44aaa438db02bd636b, type: 3}
       propertyPath: currentTeam
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504706775421578508, guid: bb3f6bdf2e060d44aaa438db02bd636b, type: 3}
+      propertyPath: colLayerCheckMask.m_Bits
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 3740828340409270361, guid: bb3f6bdf2e060d44aaa438db02bd636b, type: 3}
       propertyPath: m_Enabled

@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 3740828340409270361}
   - component: {fileID: 7133883823530963037}
   - component: {fileID: 158701393740243502}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: GenericFella
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,11 +250,15 @@ MonoBehaviour:
   damage: 1
   attackCooldown: 1
   attackRange: 4
+  melee: 0
   rotateSpeed: 270
   moveSpeed: 5
   maxStamina: 5
   sinkDelay: 4
+  aggroed: 0
   target: {fileID: 0}
+  destination: {x: 0, y: 0, z: 0}
+  distanceToTarget: 0
   targetCheckCooldown: 0.2
   _targetCheckTimer: 0
   dead: 0
@@ -325,10 +329,20 @@ MonoBehaviour:
   range: 1
   inRange: 0
   canAttack: 0
+  melee: 0
   distanceToTarget: 0
   maxHP: 5
   currentHP: 0
   hitBox: {fileID: 4897897846707204451}
+  projectile: {fileID: 0}
+  projectileSpawnPoint: {fileID: 0}
+  launchVelocity: 0
+  blueLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  redLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   weapon: {fileID: 1286474344012815078}
   anim: {fileID: 4469154668325096423}
 --- !u!136 &3740828340409270361
@@ -2341,7 +2355,7 @@ MonoBehaviour:
   heldColliders: []
   layerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 768
 --- !u!1 &4837834980397672899
 GameObject:
   m_ObjectHideFlags: 0

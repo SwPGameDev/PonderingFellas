@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEditor.UIElements;
 
 public class FellaBehavior : MonoBehaviour
 {
@@ -22,10 +23,10 @@ public class FellaBehavior : MonoBehaviour
     public enum FellaStates
     {
         Idle,
-        Patrol,
-        Wander,
-        March,
-        Attack
+        MovingToRange,
+        InRange,
+        Marching,
+        Wandering
     }
 
     public FellaStates currentState = FellaStates.Idle;
@@ -48,6 +49,7 @@ public class FellaBehavior : MonoBehaviour
     public float damage;
     public float attackCooldown;
     public float attackRange;
+    public bool melee;
 
     // MOVEMENT
     public float rotateSpeed;
@@ -64,6 +66,7 @@ public class FellaBehavior : MonoBehaviour
 
     public GameObject target;
     public Vector3 destination;
+    public float distanceToTarget;
 
     public float targetCheckCooldown;
     public float _targetCheckTimer = 0;
@@ -88,55 +91,55 @@ public class FellaBehavior : MonoBehaviour
     {
         if (dead == false)
         {
-            if (currentTeam == Team.TeamID.Blue)
+            #region Manual Testing Control
+            if (FellaController.Instance.controlBoth)
             {
-                currentState = FellaController.Instance.blueState;
+                currentState = FellaController.Instance.bothState;
             }
-            else if (currentTeam == Team.TeamID.Red)
+            else
             {
-                currentState = FellaController.Instance.redState;
+                if (currentTeam == Team.TeamID.Blue)
+                {
+                    currentState = FellaController.Instance.blueState;
+                }
+                else if (currentTeam == Team.TeamID.Red)
+                {
+                    currentState = FellaController.Instance.redState;
+                }
             }
+            #endregion
 
-            switch (currentState)
-            {
-                case FellaStates.Idle:
-                    fellaMovement.SetDestination(transform.position);
-                    break;
+            // Behavior State
+            // Move to point
+            // Chill
+            // Get in range
 
-                case FellaStates.Patrol:
-                    break;
+            // Order
+            // Move
+            // Attack
+            // Idle
+            // Wander
 
-                case FellaStates.Wander:
-                    Vector3 randomDir = new(Random.Range(-3f, 3f), transform.position.y, Random.Range(-3f, 3f));
-                    fellaMovement.SetDestination(transform.position + randomDir);
-                    break;
-
-                case FellaStates.March:
-                    if (target != null)
-                    {
-                        fellaMovement.SetDestination(target.transform.position);
-                    }
-                    else
-                    {
-                        fellaMovement.SetDestination(transform.position);
-                    }
-                    break;
-
-                case FellaStates.Attack:
-                    if (target != null)
-                    {
-                        fellaMovement.SetDestination(target.transform.position);
-                    }
-                    else
-                    {
-                        fellaMovement.SetDestination(transform.position);
-                    }
-                    break;
-            }
 
             if (target != null)
             {
-                if (fellaCombat.distanceToTarget < fellaCombat.range)
+                distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+
+                if (distanceToTarget > fellaCombat.range)
+                {
+                    fellaMovement.SetTarget(target);
+                }
+                else if (distanceToTarget <= fellaCombat.range)
+                {
+                    fellaMovement.SetDestination(transform.position);
+                    fellaMovement.SetTarget(null);
+                }
+
+
+
+
+                //Rotate to look at target
+                if (distanceToTarget < fellaCombat.range)
                 {
                     Vector3 relativePos = target.transform.position - transform.position;
                     Quaternion lookRotation = Quaternion.LookRotation(relativePos.normalized, Vector3.up);
@@ -171,6 +174,8 @@ public class FellaBehavior : MonoBehaviour
             }
             else
             {
+                // Target check
+
                 if (_targetCheckTimer < targetCheckCooldown)
                 {
                     _targetCheckTimer += Time.deltaTime;
@@ -207,6 +212,7 @@ public class FellaBehavior : MonoBehaviour
         fellaCombat.range = attackRange;
         fellaCombat.damage = damage;
         fellaCombat.attackCooldown = attackCooldown;
+        fellaCombat.melee = melee;
 
         fellaMovement.speed = moveSpeed;
         fellaMovement.maxStamina = maxStamina;
@@ -249,7 +255,7 @@ public class FellaBehavior : MonoBehaviour
     {
         List<Collider> sortedCols = new();
 
-        if (colsParam.Count > 0)
+        if (colsParam != null && colsParam.Count > 0)
         {
             foreach (Collider col in colsParam)
             {

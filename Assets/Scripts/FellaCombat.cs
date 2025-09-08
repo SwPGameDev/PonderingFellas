@@ -15,6 +15,7 @@ public class FellaCombat : MonoBehaviour
     public float range;
     public bool inRange;
     public bool canAttack = true;
+    public bool melee;
 
     public float distanceToTarget;
 
@@ -22,7 +23,11 @@ public class FellaCombat : MonoBehaviour
     public float currentHP;
 
     public Collider hitBox;
-
+    public GameObject projectile;
+    public Transform projectileSpawnPoint;
+    public float launchVelocity;
+    public LayerMask blueLayerMask;
+    public LayerMask redLayerMask;
 
     // Animation
     public GameObject weapon;
@@ -75,7 +80,14 @@ public class FellaCombat : MonoBehaviour
     void Attack()
     {
         anim.SetTrigger("Attack");
-        StartCoroutine(DelayedHit());
+        if (melee)
+        {
+            StartCoroutine(DelayedHit());
+        }
+        else
+        {
+            RangedAttack();
+        }
         canAttack = false;
     }
 
@@ -87,6 +99,23 @@ public class FellaCombat : MonoBehaviour
         foreach (Collider collider in hitColliders)
         {
             collider.GetComponent<FellaCombat>().TakeHit(damage);
+        }
+    }
+
+    void RangedAttack()
+    {
+        GameObject spawnedProjectile = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+        ProjectileBehavior projectileBehavior = spawnedProjectile.GetComponent<ProjectileBehavior>();
+        projectileBehavior.damage = damage;
+        projectileBehavior.GetComponent<Rigidbody>().linearVelocity = transform.forward * launchVelocity;
+
+        if (currentTeam == Team.TeamID.Blue)
+        {
+            projectileBehavior.GetComponent<Rigidbody>().excludeLayers = blueLayerMask;
+        }
+        else if(currentTeam == Team.TeamID.Red)
+        {
+            projectileBehavior.GetComponent<Rigidbody>().excludeLayers = redLayerMask;
         }
     }
 
