@@ -22,5 +22,11 @@ public class ProjectileBehavior : MonoBehaviour
         // Check hit obstacles or enemy
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Check do hit
+        // Stick into collider at contact point
+    }
+
 
 }
